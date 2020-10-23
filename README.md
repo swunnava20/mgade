@@ -5,7 +5,7 @@ Data format
 -------------------------
 The training, dev and test data is expected in standard CoNLL-type tab-separated format. One word per line, separate column for token and label, empty line between sentences.
 
-Make sure there is a file "tags.txt" with all the tags in the dataset. The tags should in in order.
+Multi-class classification: Make sure there is a file "tags.txt" with all the tags in the dataset. The tags should in in order.
 
 Any word with *default_label* gets label 0, any word with other labels that are in the tags.txt file gets assigned an integer i, where i is the row #. Labels are expected to be in order.
 
@@ -20,3 +20,4 @@ Print output from a saved model with
 
     python print_output.py saved_model_path.model input_file.tsv
 
+Code adapted from "Marek Rei and Anders Søgaard. Jointly learning to label sentences and tokens. AAAI 2019", for binary classification of words and sentences with a single type of attention from the words/entities.
