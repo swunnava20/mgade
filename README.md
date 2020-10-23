@@ -20,4 +20,4 @@ Print output from a saved model with
 
     python print_output.py saved_model_path.model
 
-Code adapted from "Marek Rei and Anders Søgaard. Jointly learning to label sentences and tokens. AAAI 2019", for binary classification of words and sentences with a single type of attention from the words/entities (https://github.com/marekrei/mltagger).
+Code adapted from "Marek Rei and Anders Søgaard. Jointly learning to label sentences and tokens. AAAI 2019", for binary classification of words and sentences with a single type of attention from the words/entities.
