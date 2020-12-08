@@ -2,7 +2,7 @@ import time
 import collections
 import numpy
 from itertools import groupby
-from collections import defaultdict     #sw included this for grouping individual named entities
+from collections import defaultdict     
 
 class MLTEvaluator(object):
 	def __init__(self, config):
@@ -190,45 +190,6 @@ class MLTEvaluator(object):
 		results[name + "_sent_correct_binary"] = self.sentence_correct_binary
 		results[name + "_sent_accuracy_binary"] = self.sentence_correct_binary / float(self.sentence_count)
 
-
-		# ####### relaxed evaluation - token/ word-level evaluation #######
-		"""
-		for k in range(len(self.token_ap_sum)):			
-			# mean_ap = self.token_ap_sum[k] / self.sentence_total # only calculating MAP over sentences that have any positive tokens
-			p = (float(self.token_correct[k]) / float(self.token_predicted[k])) if (self.token_predicted[k] > 0.0) else 0.0
-			r = (float(self.token_correct[k]) / float(self.token_total[k])) if (self.token_total[k] > 0.0) else 0.0
-			f = (2.0 * p * r / (p + r)) if (p+r > 0.0) else 0.0
-			f05 = ((1.0 + 0.5*0.5) * p * r / ((0.5*0.5 * p) + r)) if (((0.5*0.5 * p) + r) > 0.0) else 0.0   
-
-			# results[name + "_tok_"+str(k)+"_map"] = mean_ap 		#sw commented this line out
-			results[name + "_tok_"+str(k)+"_p"] = p
-			results[name + "_tok_"+str(k)+"_r"] = r
-			results[name + "_tok_"+str(k)+"_f"] = f
-			results[name + "_tok_"+str(k)+"_f05"] = f05
-
-			grouped_entity_level_token_predicted = []
-			for i, g in groupby(sorted(self.entity_level_token_predicted, key=lambda x: x[1]), key=lambda x: x[1]):
-				grouped_entity_level_token_predicted.append([i, sum(v[2] for v in g)]) 	#sw_comment: note that we sum the 2nd column elements here
-		
-			grouped_entity_level_token_correct = []
-			for i, g in groupby(sorted(self.entity_level_token_correct, key=lambda x: x[1]), key=lambda x: x[1]):
-				grouped_entity_level_token_correct.append([i, sum(v[3] for v in g)]) 	#sw_comment: note that we sum the 3rd column elements here
-
-			grouped_entity_level_token_total = []
-			for i, g in groupby(sorted(self.entity_level_token_total, key=lambda x: x[1]), key=lambda x: x[1]):
-				grouped_entity_level_token_total.append([i, sum(v[2] for v in g)]) 	#sw_comment: note that we sum the 2nd column elements here
-
-			results_by_group = []
-			for i in range(len(grouped_entity_level_token_total)):
-				group_p = (float(grouped_entity_level_token_correct[i][1]) / float(grouped_entity_level_token_predicted[i][1])) if (grouped_entity_level_token_predicted[i][1] > 0.0) else 0.0
-				group_r = (float(grouped_entity_level_token_correct[i][1]) / float(grouped_entity_level_token_total[i][1])) if (grouped_entity_level_token_total[i][1] > 0.0) else 0.0
-				group_f = (2.0 * group_p * group_r / (group_p + group_r)) if (group_p+group_r > 0.0) else 0.0
-				results_by_group.append([i+1, group_p, group_r, group_f])				
-
-			for i in range(len(results_by_group)):
-				print (results_by_group[i])
-		"""				
-
 		# ####### strict_evaluation ##########
 		p_all = (len(self.correct_label_chunks)) / float(len(self.predicted_label_chunks)) if (len(self.predicted_label_chunks) > 0.0) else 0.0
 		r_all = (len(self.correct_label_chunks)) / float(len(self.true_label_chunks)) if (len(self.true_label_chunks) > 0.0) else 0.0
@@ -244,37 +205,37 @@ class MLTEvaluator(object):
 		results[name + "_tok_"+"_f"] = f_all
 		results[name + "_tok_"+"_f05"] = f05_all
 
-		grouped_sw_correct_preds = defaultdict(list)  
+		grouped_correct_preds = defaultdict(list)  
 		for i in self.correct_label_chunks:
-			grouped_sw_correct_preds[i[0]].append(i)
-		for key in grouped_sw_correct_preds:    # key is the entity name 
+			grouped_correct_preds[i[0]].append(i)
+		for key in grouped_correct_preds:    # key is the entity name 
 			k = 0
-			for j in grouped_sw_correct_preds[key]:
+			for j in grouped_correct_preds[key]:
 				k += 1 
 
-		grouped_sw_total_preds = defaultdict(list)  
+		grouped_total_preds = defaultdict(list)  
 		for i in self.predicted_label_chunks:
-			grouped_sw_total_preds[i[0]].append(i)
-		for key in grouped_sw_total_preds:    # key is the entity name 
+			grouped_total_preds[i[0]].append(i)
+		for key in grouped_total_preds:    # key is the entity name 
 			k = 0
-			for j in grouped_sw_total_preds[key]:
+			for j in grouped_total_preds[key]:
 				k += 1 
 
-		grouped_sw_total_truelabels = defaultdict(list)  
+		grouped_total_truelabels = defaultdict(list)  
 		for i in self.true_label_chunks:
-			grouped_sw_total_truelabels[i[0]].append(i)
-		for key in grouped_sw_total_truelabels:    # key is the entity name 
+			grouped_total_truelabels[i[0]].append(i)
+		for key in grouped_total_truelabels:    # key is the entity name 
 			k = 0
-			for j in grouped_sw_total_truelabels[key]:
+			for j in grouped_total_truelabels[key]:
 				k += 1         
 
-		for key in grouped_sw_total_truelabels:    # key is the entity name 
+		for key in grouped_total_truelabels:    # key is the entity name 
 			truelabels = total_preds = correct_preds = 0
-			for j in grouped_sw_total_truelabels[key]:
+			for j in grouped_total_truelabels[key]:
 				truelabels += 1       					  
-			for j in grouped_sw_total_preds[key]:
+			for j in grouped_total_preds[key]:
 				total_preds += 1  
-			for j in grouped_sw_correct_preds[key]:
+			for j in grouped_correct_preds[key]:
 				correct_preds += 1   
 			p_group = float(correct_preds) / float(total_preds) if float(total_preds) > 0.0 else 0.0
 			r_group = float(correct_preds) / float(truelabels) if float(truelabels) > 0.0 else 0.0
