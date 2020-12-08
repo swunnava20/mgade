@@ -21,3 +21,14 @@ Print output from a saved model with
     python print_output.py saved_model_path.model
 
 Code adapted from "Marek Rei and Anders Søgaard. Jointly learning to label sentences and tokens. AAAI 2019", for binary classification of words and sentences with a single type of attention from the words/entities.
+
+
+If you find this code or our work useful, please cite our paper:
+
+@inproceedings{wunnava2020dual,
+  title={A Dual-Attention Network for Joint Named Entity Recognition and Sentence Classification of Adverse Drug Events},
+  author={Wunnava, Susmitha and Qin, Xiao and Kakar, Tabassum and Kong, Xiangnan and Rundensteiner, Elke},
+  booktitle={Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing: Findings},
+  pages={3414--3423},
+  year={2020}
+}
