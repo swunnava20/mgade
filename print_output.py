@@ -25,8 +25,7 @@ if __name__ == "__main__":
 	with open(filename_tags) as f:
 		for idx, word in enumerate(f):
 			word = word.strip()
-			dict_tags[word] = idx+1     # we have (idx+1) because we deleted defalut label "O" from the tags file
-	print("sw_print:dict_tags", dict_tags.items())
+			dict_tags[word] = idx+1  
 
 	print_ALL_weights = True
 	print_no_attention_sentLast = False
