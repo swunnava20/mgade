@@ -126,7 +126,7 @@ def process_sentences(data, model, is_training, learningrate, config, name):
 	evaluator = MLTEvaluator(config)
 	batches_of_sentence_ids = create_batches_of_sentence_ids(data, config["batch_equal_size"], config["max_batch_size"])
 	if is_training == True:
-		random.shuffle(batches_of_sentence_ids)     #sw (5-24-19): look into this for possible future sequential classiifcation meaning do not shuffle for sequential
+		random.shuffle(batches_of_sentence_ids)     
 
 	for sentence_ids_in_batch in batches_of_sentence_ids:
 		batch = [data[i] for i in sentence_ids_in_batch]
@@ -144,10 +144,8 @@ def process_sentences(data, model, is_training, learningrate, config, name):
 
 
 def run_experiment(config_path):
-	config = parse_config("config", config_path)
-	print ("sw_print: config_path: ", config_path)    
+	config = parse_config("config", config_path) 
 	temp_model_path = config_path + ".model"
-	print ("sw_print: temp_model_path: ", temp_model_path)
 	if "random_seed" in config:
 		random.seed(config["random_seed"])
 		numpy.random.seed(config["random_seed"])
