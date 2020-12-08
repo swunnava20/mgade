@@ -342,7 +342,6 @@ class MLTModel(object):
 						if entity == 'O':
 							col_to_zero.append(0)
 						else:
-							print("sw_print:dict_tags", self.dict_tags.items())
 							for tag, idx in self.dict_tags.items():
 								if entity == tag:
 									col_to_zero.append(idx)						
@@ -609,8 +608,6 @@ class MLTModel(object):
 		dump["char2id"] = self.char2id
 		dump["singletons"] = self.singletons
 
-		print ("sw_print: filename from the function 'def save(self, filename)':",filename)
-
 		dump["params"] = {}
 		for variable in tf.global_variables():
 			assert(variable.name not in dump["params"]), "Error: variable with this name already exists" + str(variable.name)
@@ -621,7 +618,6 @@ class MLTModel(object):
 
 	@staticmethod
 	def load(filename, new_config=None):
-		print ("sw_print: filename from the function 'def load(filename, new_config=None):'",filename)
 		with open(filename, 'rb') as f:
 			dump = pickle.load(f)
 
