@@ -141,27 +141,6 @@ class MLTModel(object):
 		return processed_tensor
 		
 
-	def da_predicted_label_proba_score(self,prediction_probs_onlymax_allother0,processed_tensor):
-		if self.config["mask_attention_from_label_proba_score"] == True: 
-			attention_from_label_proba_score_col_to_zero = [0] #column numbers you want to be zeroed out
-			attention_from_label_proba_score_tnsr_shape = tf.shape(prediction_probs_onlymax_allother0)
-			attention_from_label_proba_score_weight_mask = [tf.one_hot(col_num*tf.ones((attention_from_label_proba_score_tnsr_shape[0], attention_from_label_proba_score_tnsr_shape[1]), dtype=tf.int32), attention_from_label_proba_score_tnsr_shape[-1]) for col_num in attention_from_label_proba_score_col_to_zero]
-			attention_from_label_proba_score_weight_mask = tf.reduce_sum(attention_from_label_proba_score_weight_mask, axis=0)
-			attention_from_label_proba_score_weight_mask = tf.cast(tf.logical_not(tf.cast(attention_from_label_proba_score_weight_mask, tf.bool)), tf.float32)
-			prediction_probs_onlymax_allother0 = (prediction_probs_onlymax_allother0 * attention_from_label_proba_score_weight_mask)
-			if self.config["reduction_type_attention_from_label_proba_score"] == "sum":
-				attention_from_label_proba_score = tf.reduce_sum(prediction_probs_onlymax_allother0,axis=1)		
-		elif self.config["mask_attention_from_label_proba_score"] == False: 	
-			if self.config["reduction_type_attention_from_label_proba_score"] == "sum":
-				attention_from_label_proba_score = tf.reduce_sum(prediction_probs_onlymax_allother0,axis=1)		
-			elif self.config["reduction_type_attention_from_label_proba_score"] == "avg":
-				attention_from_label_proba_score = tf.reduce_mean(prediction_probs_onlymax_allother0,axis=1)		
-			elif self.config["reduction_type_attention_from_label_proba_score"] == "normalize":			
-				attention_from_label_proba_score = tf.reduce_sum(prediction_probs_onlymax_allother0,axis=1) / tf.reduce_sum(tf.reduce_sum(prediction_probs_onlymax_allother0,axis=1), 1, keep_dims=True) 	
-		processed_tensor = tf.concat([processed_tensor,attention_from_label_proba_score],-1) 	
-		return processed_tensor
-
-
 	def construct_network(self):
 		self.word_ids = tf.placeholder(tf.int32, [None, None], name="word_ids")
 		self.char_ids = tf.placeholder(tf.int32, [None, None, None], name="char_ids")
